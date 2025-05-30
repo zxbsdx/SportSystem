@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>欢迎来到每日运动记录系统</title>
+        <meta http-equiv="content-type" content="text/html" charset="utf-8">
+        <script language="JavaScript" type="txt/JavaScript">
+            // 检查输入
+            function checkForm(form){
+                if(form.username.value == ""){
+                    alert("请输入用户名");
+                    form.username.focus();
+                    return false;
+                }
+                if(form.passwd.value == ""){
+                    alert("请输入密码");
+                    form.passwd.focus();
+                    return false;
+                }
+                return true;
+            }
+
+        </script>
+    </head>
+
+    <body>
+        <h1>欢迎来到每日运动记录系统</h1>
+        <p>输入用户名跟密码开启你的运动之旅吧!</p>
+        <form action="login.jsp" method="post" onsubmit="return checkform(this);">
+            <table style="border: 0; padding-top: 0;">
+                <tr>
+                    <td>用户名:</td><td><input type="text" name="username"></td>
+                </tr>
+                  <tr>
+                    <td>密码:</td><td><input type="password" name="passwd"></td>
+                </tr>
+                <td>
+                    <tr>
+                        <input type="submit" value="登录">
+                    </tr>
+                     <tr>
+                        <input type="button" value="注册" onclick="window.location = 'register.html'">
+                    </tr>
+                </td>
+            </table>
+        </form>
+
+    </body>
+
+
+
+</html>
