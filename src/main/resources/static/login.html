@@ -1,50 +1,150 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>欢迎来到每日运动记录系统</title>
-        <meta http-equiv="content-type" content="text/html" charset="utf-8">
-        <script language="JavaScript" type="txt/JavaScript">
-            // 检查输入
-            function checkForm(form){
-                if(form.username.value == ""){
-                    alert("请输入用户名");
-                    form.username.focus();
-                    return false;
-                }
-                if(form.passwd.value == ""){
-                    alert("请输入密码");
-                    form.passwd.focus();
-                    return false;
-                }
-                return true;
+<head>
+    <title>欢迎来到每日运动记录系统</title>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4a6baf;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .form-table td {
+            padding: 8px 0;
+        }
+        
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            border-color: #4a6baf;
+            outline: none;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        input[type="submit"], 
+        input[type="button"] {
+            background-color: #4a6baf;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            flex: 1;
+            margin: 0 5px;
+        }
+        
+        input[type="button"] {
+            background-color: #6c757d;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #3a5a9f;
+        }
+        
+        input[type="button"]:hover {
+            background-color: #5a6268;
+        }
+        
+        .form-row {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+    <script>
+        // 检查输入
+        function checkForm(form) {
+            if(form.username.value == "") {
+                alert("请输入用户名");
+                form.username.focus();
+                return false;
             }
+            if(form.passwd.value == "") {
+                alert("请输入密码");
+                form.passwd.focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
 
-        </script>
-    </head>
-
-    <body>
+<body>
+    <div class="container">
         <h1>欢迎来到每日运动记录系统</h1>
-        <p>输入用户名跟密码开启你的运动之旅吧!</p>
-        <form action="login.jsp" method="post" onsubmit="return checkform(this);">
-            <table style="border: 0; padding-top: 0;">
-                <tr>
-                    <td>用户名:</td><td><input type="text" name="username"></td>
-                </tr>
-                  <tr>
-                    <td>密码:</td><td><input type="password" name="passwd"></td>
-                </tr>
-                <td>
-                    <tr>
-                        <input type="submit" value="登录">
-                    </tr>
-                     <tr>
-                        <input type="button" value="注册" onclick="window.location = 'register.html'">
-                    </tr>
-                </td>
-            </table>
+        <p>输入用户名和密码开启你的运动之旅吧!</p>
+        
+        <form action="login.jsp" method="post" onsubmit="return checkForm(this);">
+            <div class="form-row">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名">
+            </div>
+            
+            <div class="form-row">
+                <label for="passwd">密码:</label>
+                <input type="password" id="passwd" name="passwd" placeholder="请输入密码">
+            </div>
+            
+            <div class="button-group">
+                <input type="submit" value="登录">
+                <input type="button" value="注册" onclick="window.location = 'register.html'">
+            </div>
         </form>
-
-    </body>
-
-
-
+    </div>
+</body>
 </html>
