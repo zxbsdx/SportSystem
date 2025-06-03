@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户注册</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>用户注册</h2>
+    <form action="/register" method="post">
+        <div>
+            <label>用户名:</label>
+            <input type="text" name="username" required minlength="4">
+            <span class="error">${usernameError}</span>
+        </div>
+        <div>
+            <label>密码:</label>
+            <input type="password" name="password" required minlength="6">
+            <span class="error">${passwordError}</span>
+        </div>
+        <div>
+            <label>邮箱:</label>
+            <input type="email" name="email" required>
+            <span class="error">${emailError}</span>
+        </div>
+        <button type="submit">注册</button>
+    </form>
+    <p>已有账号？<a href="/login">立即登录</a></p>
+</body>
+</html>
