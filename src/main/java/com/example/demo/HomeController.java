@@ -4,13 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.springframework.ui.Model; 
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 
 
 
@@ -28,49 +33,91 @@ public class HomeController {
         return "index"; 
     }
 
-    // 返回登录页面, 不知什么原因找不到文件
-    @GetMapping("/login")  
+    // 返回登录页面, 不知什么原因找不到文件(已解决)
+    @GetMapping("/login-page")  
     public String login() {
         return "login"; 
+    }
+
+    @GetMapping("/favicon.ico")  
+    public String favicon() {
+        return "redirect:/favicon.ico"; 
     }
     
     // 处理登录请求
     @PostMapping("/login")
-    public String processLogin(
+    public String processLogin(        
             @RequestParam String username,
             @RequestParam String password,
             HttpSession session,
             Model model) {
         
         User user = userRepository.findByUsername(username);
-        
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        // System.out.println(passwordEncoder.matches(password, user.getPassword()));
+       
+        System.out.println(user.getPassword());
+        System.out.println(password);
+        // if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+
+        if (user!=null && password.equals(user.getPassword())){
             // 登录成功
             session.setAttribute("currentUser", user);
-            return "redirect:/index";
+            return "index";
         } else {
             // 登录失败
+            // model.addAttribute("error", user);
             model.addAttribute("error", "用户名或密码错误");
+  
             return "login";
         }
     }
     
-    // 欢迎页面
-    @GetMapping("/welcome")
-    public String showWelcomePage(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("currentUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("user", user);
-        return "welcome";
-    }
+
     
     // 注销
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
+    }
+
+    // 显示注册页面
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new UserDto());
+        return "register";
+    }
+
+    // 处理注册请求
+    @PostMapping("/register")
+    public String registerUser(
+            @Valid @ModelAttribute("user") UserDto userDto,
+            BindingResult result,
+            Model model) {
+
+        // 1. 验证输入
+        if (result.hasErrors()) {
+            return "register";
+        }
+
+        // 2. 检查用户名是否已存在
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            model.addAttribute("usernameError", "用户名已被使用");
+            return "register";
+        }
+
+
+        // 4. 创建新用户
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword())); // 密码加密
+
+        
+        // 5. 保存到数据库
+        userRepository.save(user);
+
+        // 6. 注册成功后重定向到登录页
+        return "redirect:/login?registered";
     }
 }
 

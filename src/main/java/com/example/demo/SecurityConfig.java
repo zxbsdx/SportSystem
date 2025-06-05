@@ -13,13 +13,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/", "/register", "/register/**", "/static/**").permitAll()
+                .requestMatchers("/login-page", "/register", "/register/**", "/static/**", "/login").permitAll()
                 .anyRequest().authenticated()
             )
+            // 禁用默认表单登录 自定义处理post请求
+            // .formLogin(form -> form.disable()
             .formLogin(form -> form
-                .loginPage("/login")
+                .loginPage("/login-page")
+                
+                .defaultSuccessUrl("/", true)
                 .permitAll()
-            );
+            )// 禁用CSRF（仅限演示，生产环境需开启）
+            .csrf(csrf -> csrf.disable());
         return http.build();
     }
 

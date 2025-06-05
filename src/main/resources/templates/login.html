@@ -129,20 +129,22 @@
         <h1>欢迎来到每日运动记录系统</h1>
         <p>输入用户名和密码开启你的运动之旅吧!</p>
         
-        <form action="login.jsp" method="post" onsubmit="return checkForm(this);">
+        <form action="login" method="post" onsubmit="return checkForm(this);">
+            <!-- 错误消息显示 -->
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
             <div class="form-row">
                 <label for="username">用户名:</label>
                 <input type="text" id="username" name="username" placeholder="请输入用户名">
             </div>
             
             <div class="form-row">
-                <label for="passwd">密码:</label>
-                <input type="password" id="passwd" name="passwd" placeholder="请输入密码">
+                <label for="password">密码:</label>
+                <input type="password" id="passwd" name="password" placeholder="请输入密码">
             </div>
             
             <div class="button-group">
                 <input type="submit" value="登录">
-                <input type="button" value="注册" onclick="window.location = 'register.html'">
+                <input type="button" value="注册" onclick="window.location = 'register'">
             </div>
         </form>
     </div>

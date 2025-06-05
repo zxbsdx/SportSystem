@@ -35,15 +35,15 @@
             session.setAttribute("username", rs.getString("username"));
             session.setAttribute("realnaem", rs.getString("realname"));
             // 转到之后的页面
-            response.sendRedirect("index.html");
+            response.sendRedirect("index");
 
         }else{
             // 密码错误返回
-            response.sendRedirect("login.html");
+            response.sendRedirect("login");
         }
     }catch(SQLException ex){
         ex.printStackTrace();
-        response.sendRedirect("login.html");
+        response.sendRedirect("login");
         return;
     }
 
