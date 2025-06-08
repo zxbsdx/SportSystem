@@ -1,5 +1,8 @@
 package com.example.demo;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -7,9 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -28,7 +34,7 @@ public class HomeController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/")  // 处理根路径请求
+    @GetMapping("/index")  
     public String home() {
         return "index"; 
     }
@@ -41,7 +47,7 @@ public class HomeController {
 
     @GetMapping("/favicon.ico")  
     public String favicon() {
-        return "redirect:/favicon.ico"; 
+        return "/favicon.ico"; 
     }
     
     // 处理登录请求
@@ -57,16 +63,29 @@ public class HomeController {
        
         System.out.println(user.getPassword());
         System.out.println(password);
-        // if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        //if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
         if (user!=null && password.equals(user.getPassword())){
             // 登录成功
+
+            // 注意手动设置JSESSIONID Spring Security 不认
+            // session.setAttribute("currentUser", user);
+
+            List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), 
+                null, 
+                authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(auth);
+          
+        // 存储用户对象到 Session（非必须）
             session.setAttribute("currentUser", user);
+
             return "index";
         } else {
             // 登录失败
             // model.addAttribute("error", user);
-            model.addAttribute("error", "用户名或密码错误");
   
             return "login";
         }
@@ -111,13 +130,13 @@ public class HomeController {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword())); // 密码加密
-
+        //user.setPassword(userDto.getPassword()); // 加个der
         
         // 5. 保存到数据库
         userRepository.save(user);
 
         // 6. 注册成功后重定向到登录页
-        return "redirect:/login?registered";
+        return "login";
     }
 }
 

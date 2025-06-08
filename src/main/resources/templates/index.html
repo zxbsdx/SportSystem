@@ -1,9 +1,1454 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>My App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日运动记录系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+        
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: #4CAF50;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-signin {
+            background-color: #ff9800;
+        }
+        
+        .btn-signin:hover {
+            background-color: #e68a00;
+        }
+        
+        .btn-login {
+            background-color: #2196F3;
+        }
+        
+        .btn-login:hover {
+            background-color: #0b7dda;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        
+        .btn-secondary {
+            background-color: #607d8b;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #455a64;
+        }
+        
+        .achievement-badge {
+            display: inline-block;
+            background-color: #ffc107;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 5px;
+            font-size: 0.8em;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .external-link {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        
+        .external-link:hover {
+            text-decoration: underline;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .friend-request-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            justify-content: space-between;
+        }
+        
+        .friend-request-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-results {
+            margin-top: 15px;
+        }
+        
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            justify-content: space-between;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-badge {
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Spring Boot!</h1>
+    <div class="container" id="app-container">
+
+        <div id="auth-container">
+            
+        </div>
+        
+      
+        <div id="main-app" class="hidden">
+            <header>
+                <h1>每日运动记录系统</h1>
+                <p>记录你的运动，挑战自我，获得成就！</p>
+            </header>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('dashboard')">首页</a></li>
+                    <li><a href="#" onclick="showSection('record')">记录运动</a></li>
+                    <li><a href="#" onclick="showSection('history')">运动历史</a></li>
+                    <li><a href="#" onclick="showSection('friends')">好友
+                        <span id="friend-request-badge" class="notification-badge hidden">0</span>
+                    </a></li>
+                    <li><a href="#" onclick="showSection('achievements')">成就系统</a></li>
+                    <li><a href="#" onclick="showSection('signin')">每日签到</a></li>
+                    <li><a href="#" onclick="showSection('profile')">个人中心</a></li>
+                    <li><a href="#" onclick="logout()">退出</a></li>
+                </ul>
+            </nav>
+            
+            <div class="main-content">
+                <div class="sidebar">
+                    <div class="card">
+                        <h3>今日状态</h3>
+                        <p>已运动: <strong id="today-exercise">0分钟</strong></p>
+                        <p>消耗: <strong id="today-calories">0千卡</strong></p>
+                        <p>今日步数: <strong id="today-steps">0步</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress" id="today-progress"></div>
+                        </div>
+                        <p id="progress-text">今日尚未运动</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>快速记录</h3>
+                        <button class="btn" onclick="quickRecord('walking')">步行</button>
+                        <button class="btn" onclick="quickRecord('running')">跑步</button>
+                        <button class="btn" onclick="quickRecord('cycling')">骑行</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>好友动态</h3>
+                        <div id="friend-activity">
+                            <div class="empty-state">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无动态">
+                                <p>暂无好友动态</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content">
+                    <!-- 仪表盘 -->
+                    <div id="dashboard" class="section">
+                        <h2 id="welcome-message">欢迎使用运动记录系统</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>本周运动时间</h3>
+                                <p id="week-time">0分钟</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>本月运动天数</h3>
+                                <p id="month-days">0天</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>累计成就</h3>
+                                <p id="total-achievements">0个</p>
+                            </div>
+                        </div>
+                        
+                        <h3>近期活动</h3>
+                        <div class="empty-state" id="recent-empty">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无记录">
+                            <h3>暂无运动记录</h3>
+                            <p>开始记录你的第一次运动吧！</p>
+                            <button class="btn" onclick="showSection('record')">记录运动</button>
+                        </div>
+                        <table id="recent-table" class="hidden">
+                            <tr>
+                                <th>日期</th>
+                                <th>运动类型</th>
+                                <th>时长</th>
+                                <th>消耗</th>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 记录运动 -->
+                    <div id="record" class="section hidden">
+                        <h2>记录新的运动</h2>
+                        <form id="exercise-form">
+                            <div class="form-group">
+                                <label for="exercise-type">运动类型</label>
+                                <select id="exercise-type" required>
+                                    <option value="">选择运动类型</option>
+                                    <option value="walking">步行</option>
+                                    <option value="running">跑步</option>
+                                    <option value="cycling">骑行</option>
+                                    <option value="swimming">游泳</option>
+                                    <option value="yoga">瑜伽</option>
+                                    <option value="gym">健身房</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="duration">持续时间 (分钟)</label>
+                                <input type="number" id="duration" min="1" max="300" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="distance">距离 (公里，可选)</label>
+                                <input type="number" id="distance" min="0" step="0.1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="calories">消耗卡路里 (可选)</label>
+                                <input type="number" id="calories" min="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notes">备注</label>
+                                <input type="text" id="notes" placeholder="添加一些备注...">
+                            </div>
+                            
+                            <button type="submit" class="btn">保存记录</button>
+                        </form>
+                    </div>
+                    
+                    <!-- 运动历史 -->
+                    <div id="history" class="section hidden">
+                        <h2>运动历史记录</h2>
+                        <div class="form-group">
+                            <label for="history-filter">筛选</label>
+                            <select id="history-filter">
+                                <option value="all">全部记录</option>
+                                <option value="week">本周</option>
+                                <option value="month">本月</option>
+                                <option value="running">仅跑步</option>
+                                <option value="walking">仅步行</option>
+                                <option value="cycling">仅骑行</option>
+                            </select>
+                        </div>
+                        
+                        <div class="empty-state" id="history-empty">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无记录">
+                            <h3>暂无运动记录</h3>
+                            <p>开始记录你的第一次运动吧！</p>
+                            <button class="btn" onclick="showSection('record')">记录运动</button>
+                        </div>
+                        <table id="history-table" class="hidden">
+                            <tr>
+                                <th>日期</th>
+                                <th>运动类型</th>
+                                <th>时长</th>
+                                <th>距离</th>
+                                <th>消耗</th>
+                                <th>操作</th>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 好友系统 -->
+                    <div id="friends" class="section hidden">
+                        <h2>好友系统</h2>
+                        
+                        <div class="tabs">
+                            <div class="tab active" onclick="showFriendTab('friends-list')">好友列表</div>
+                            <div class="tab" onclick="showFriendTab('add-friend')">添加好友</div>
+                            <div class="tab" onclick="showFriendTab('friend-requests')">
+                                好友请求
+                                <span id="friend-requests-count" class="notification-badge hidden">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 好友列表 -->
+                        <div id="friends-list" class="friend-tab">
+                            <h3>我的好友</h3>
+                            <div class="empty-state" id="no-friends">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无好友">
+                                <h3>暂无好友</h3>
+                                <p>快去添加一些好友吧！</p>
+                                <button class="btn" onclick="showFriendTab('add-friend')">添加好友</button>
+                            </div>
+                            <div id="friends-list-container" class="hidden">
+                                <!-- 好友列表将在这里动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 添加好友 -->
+                        <div id="add-friend" class="friend-tab hidden">
+                            <h3>添加好友</h3>
+                            <div class="form-group">
+                                <label for="friend-search">搜索用户名</label>
+                                <input type="text" id="friend-search" placeholder="输入用户名搜索">
+                                <button class="btn" onclick="searchFriends()" style="margin-top: 10px;">搜索</button>
+                            </div>
+                            
+                            <div class="search-results" id="search-results">
+                                <!-- 搜索结果将在这里显示 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 好友请求 -->
+                        <div id="friend-requests" class="friend-tab hidden">
+                            <h3>好友请求</h3>
+                            <div class="empty-state" id="no-requests">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无请求">
+                                <h3>暂无好友请求</h3>
+                            </div>
+                            <div id="friend-requests-container" class="hidden">
+                                <!-- 好友请求将在这里显示 -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 成就系统 -->
+                    <div id="achievements" class="section hidden">
+                        <h2>成就系统</h2>
+                        <p>已获得成就: <span id="achieved-count">0</span>/<span id="total-achievements-count">10</span></p>
+                        
+                        <h3>已获得成就</h3>
+                        <div id="achieved-list" class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无成就">
+                            <h3>暂无成就</h3>
+                            <p>开始运动来解锁成就吧！</p>
+                        </div>
+                        
+                        <h3>待完成成就</h3>
+                        <table>
+                            <tr>
+                                <th>成就名称</th>
+                                <th>进度</th>
+                                <th>奖励</th>
+                            </tr>
+                            <tr>
+                                <td>运动新手 (完成1次运动)</td>
+                                <td>0/1次</td>
+                                <td>铜牌成就</td>
+                            </tr>
+                            <tr>
+                                <td>5公里跑者 (完成5公里跑步)</td>
+                                <td>0/5公里</td>
+                                <td>银牌成就</td>
+                            </tr>
+                            <tr>
+                                <td>连续3天 (连续运动3天)</td>
+                                <td>0/3天</td>
+                                <td>铜牌成就</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- 每日签到 -->
+                    <div id="signin" class="section hidden">
+                        <h2>每日签到</h2>
+                        <div class="card" style="text-align: center;">
+                            <h3>今日签到</h3>
+                            <p>连续签到: <strong id="signin-streak">0天</strong></p>
+                            <button class="btn btn-signin" id="signin-btn" onclick="signIn()">立即签到</button>
+                            <p id="signin-message" style="margin-top: 10px;"></p>
+                        </div>
+                        
+                        <h3>签到日历</h3>
+                        <div class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无签到">
+                            <h3>暂无签到记录</h3>
+                            <p>立即签到开始你的健康之旅！</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 个人中心 -->
+                    <div id="profile" class="section hidden">
+                        <h2>个人中心</h2>
+                        <div style="margin-bottom: 20px;">
+                            <h3 id="profile-username">用户名</h3>
+                            <p id="join-date">加入日期: </p>
+                            <p>个人签名: <span id="profile-signature">保持运动，保持健康！</span></p>
+                        </div>
+                        
+                        <h3>个人信息</h3>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="profile-gender">性别</label>
+                                <select id="profile-gender">
+                                    <option value="male">男</option>
+                                    <option value="female">女</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-birthday">生日</label>
+                                <input type="date" id="profile-birthday">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-height">身高 (cm)</label>
+                                <input type="number" id="profile-height" min="100" max="250">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-weight">体重 (kg)</label>
+                                <input type="number" id="profile-weight" min="30" max="200">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-signature-input">个人签名</label>
+                                <input type="text" id="profile-signature-input" value="保持运动，保持健康！">
+                            </div>
+                            
+                            <button type="submit" class="btn">保存信息</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>每日运动记录系统 &copy; 2023 | 健康生活，从运动开始！</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        // 获取当前用户数据
+        fetch('/api/userInfo', { method: 'POST', credentials: 'include' })
+        .then(response => response.json())
+        .then(user => {
+            if (user) {
+                console.log("当前用户：", user.username);
+            } else {
+                console.log("未登录");
+            }
+        })
+        .catch(error => {
+            console.error("获取用户信息失败：", error);
+        });
+        let exercises = [];
+        let signIns = [];
+        let friendRequests = [];
+        let friendships = [];
+
+        window.addEventListener('load', function() {
+            login();   
+        });
+        
+        // DOM加载完成后初始化
+            document.addEventListener('DOMContentLoaded', function() {
+            // 初始化表单提交事件
+            document.getElementById('login-form').addEventListener('submit', login);
+            document.getElementById('register-form').addEventListener('submit', register);
+            document.getElementById('exercise-form').addEventListener('submit', saveExercise);
+            document.getElementById('profile-form').addEventListener('submit', saveProfile);
+            
+            // 从本地存储加载数据
+            loadData();
+        });
+        
+        // 加载本地存储的数据
+        function loadData() {
+            const savedUsers = localStorage.getItem('fitnessUsers');
+            const savedExercises = localStorage.getItem('fitnessExercises');
+            const savedSignIns = localStorage.getItem('fitnessSignIns');
+            const savedFriendRequests = localStorage.getItem('fitnessFriendRequests');
+            const savedFriendships = localStorage.getItem('fitnessFriendships');
+            
+            if (savedUsers) users = JSON.parse(savedUsers);
+            if (savedExercises) exercises = JSON.parse(savedExercises);
+            if (savedSignIns) signIns = JSON.parse(savedSignIns);
+            if (savedFriendRequests) friendRequests = JSON.parse(savedFriendRequests);
+            if (savedFriendships) friendships = JSON.parse(savedFriendships);
+        }
+        
+        // 保存数据到本地存储
+        function saveData() {
+            localStorage.setItem('fitnessUsers', JSON.stringify(users));
+            localStorage.setItem('fitnessExercises', JSON.stringify(exercises));
+            localStorage.setItem('fitnessSignIns', JSON.stringify(signIns));
+            localStorage.setItem('fitnessFriendRequests', JSON.stringify(friendRequests));
+            localStorage.setItem('fitnessFriendships', JSON.stringify(friendships));
+        }
+
+        // 登录功能
+        function login() {
+            //e.preventDefault();
+ 
+            
+            const user =  { 
+                username: "jiangnan", 
+                password: "222333", 
+                id: 1
+             
+            };
+            
+    
+            currentUser = user;
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            updateUI();
+        
+        }
+        
+       
+        
+        // 退出登录
+        function logout() {
+            currentUser = null;
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('login-form').reset();
+        }
+        
+        // 更新UI显示
+        function updateUI() {
+            if (!currentUser) return;
+            
+           
+            // 更新欢迎信息
+            document.getElementById('welcome-message').textContent = `欢迎回来，${currentUser.username}！`;
+            document.getElementById('profile-username').textContent = currentUser.username;
+            document.getElementById('join-date').textContent = `加入日期: ${currentUser.joinDate}`;
+            document.getElementById('profile-signature').textContent = currentUser.signature;
+            document.getElementById('profile-signature-input').value = currentUser.signature;
+            
+            // 更新个人资料表单
+            document.getElementById('profile-gender').value = currentUser.gender;
+            document.getElementById('profile-birthday').value = currentUser.birthday;
+            document.getElementById('profile-height').value = currentUser.height;
+            document.getElementById('profile-weight').value = currentUser.weight;
+            
+            // 更新运动数据
+            updateExerciseData();
+            updateSignInData();
+            updateFriendData();
+        }
+        
+        // 更新运动相关数据
+        function updateExerciseData() {
+            if (!currentUser) return;
+            
+            const userExercises = exercises.filter(e => e.userId === currentUser.id);
+            const today = new Date().toISOString().split('T')[0];
+            const todayExercises = userExercises.filter(e => e.date === today);
+            
+            // 今日运动数据
+            let todayDuration = 0;
+            let todayCalories = 0;
+            
+            todayExercises.forEach(ex => {
+                todayDuration += parseInt(ex.duration);
+                todayCalories += parseInt(ex.calories || 0);
+            });
+            
+            document.getElementById('today-exercise').textContent = `${todayDuration}分钟`;
+            document.getElementById('today-calories').textContent = `${todayCalories}千卡`;
+            
+            const progress = Math.min(100, todayDuration / 60 * 100);
+            document.getElementById('today-progress').style.width = `${progress}%`;
+            
+            if (todayDuration > 0) {
+                document.getElementById('progress-text').textContent = `完成今日目标的${Math.round(progress)}%`;
+            } else {
+                document.getElementById('progress-text').textContent = '今日尚未运动';
+            }
+            
+            // 近期活动
+            if (userExercises.length > 0) {
+                document.getElementById('recent-empty').classList.add('hidden');
+                document.getElementById('recent-table').classList.remove('hidden');
+                
+                const tableBody = document.getElementById('recent-table');
+                // 清除旧行（保留表头）
+                while (tableBody.rows.length > 1) {
+                    tableBody.deleteRow(1);
+                }
+                
+                // 显示最近的5条记录
+                const recentExercises = userExercises.slice(-5).reverse();
+                recentExercises.forEach(ex => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = ex.date;
+                    row.insertCell(1).textContent = getExerciseName(ex.type);
+                    row.insertCell(2).textContent = `${ex.duration}分钟`;
+                    row.insertCell(3).textContent = ex.calories ? `${ex.calories}千卡` : '-';
+                });
+            } else {
+                document.getElementById('recent-empty').classList.remove('hidden');
+                document.getElementById('recent-table').classList.add('hidden');
+            }
+            
+            // 运动历史
+            if (userExercises.length > 0) {
+                document.getElementById('history-empty').classList.add('hidden');
+                document.getElementById('history-table').classList.remove('hidden');
+                
+                const tableBody = document.getElementById('history-table');
+                // 清除旧行（保留表头）
+                while (tableBody.rows.length > 1) {
+                    tableBody.deleteRow(1);
+                }
+                
+                // 显示所有记录
+                userExercises.reverse().forEach(ex => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = ex.date;
+                    row.insertCell(1).textContent = getExerciseName(ex.type);
+                    row.insertCell(2).textContent = `${ex.duration}分钟`;
+                    row.insertCell(3).textContent = ex.distance ? `${ex.distance}公里` : '-';
+                    row.insertCell(4).textContent = ex.calories ? `${ex.calories}千卡` : '-';
+                    
+                    const actionCell = row.insertCell(5);
+                    actionCell.innerHTML = '<button class="btn">详情</button>';
+                });
+            } else {
+                document.getElementById('history-empty').classList.remove('hidden');
+                document.getElementById('history-table').classList.add('hidden');
+            }
+            
+            // 更新统计信息
+            const weekMinutes = userExercises
+                .filter(ex => isDateInThisWeek(ex.date))
+                .reduce((sum, ex) => sum + parseInt(ex.duration), 0);
+            
+            const monthDays = new Set(userExercises
+                .filter(ex => isDateInThisMonth(ex.date))
+                .map(ex => ex.date)).size;
+            
+            document.getElementById('week-time').textContent = `${weekMinutes}分钟`;
+            document.getElementById('month-days').textContent = `${monthDays}天`;
+        }
+        
+        // 更新签到数据
+        function updateSignInData() {
+            if (!currentUser) return;
+            
+            const userSignIns = signIns.filter(s => s.userId === currentUser.id);
+            const today = new Date().toISOString().split('T')[0];
+            const hasSignedInToday = userSignIns.some(s => s.date === today);
+            
+            // 计算连续签到天数
+            let streak = 0;
+            if (userSignIns.length > 0) {
+                const sortedSignIns = [...userSignIns].sort((a, b) => b.date.localeCompare(a.date));
+                let prevDate = new Date(today);
+                
+                for (let i = 0; i < sortedSignIns.length; i++) {
+                    const signInDate = new Date(sortedSignIns[i].date);
+                    const diffDays = Math.floor((prevDate - signInDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (i === 0 && !hasSignedInToday) {
+                        // 跳过今天如果还没签到
+                        continue;
+                    }
+                    
+                    if (i === 0 || diffDays === 1) {
+                        streak++;
+                        prevDate = signInDate;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            
+            document.getElementById('signin-streak').textContent = `${streak}天`;
+            
+            if (hasSignedInToday) {
+                document.getElementById('signin-btn').disabled = true;
+                document.getElementById('signin-btn').textContent = '今日已签到';
+                document.getElementById('signin-message').textContent = '今天已经签到过了！';
+            } else {
+                document.getElementById('signin-btn').disabled = false;
+                document.getElementById('signin-btn').textContent = '立即签到';
+                document.getElementById('signin-message').textContent = '';
+            }
+        }
+        
+        // 更新好友相关数据
+        function updateFriendData() {
+            if (!currentUser) return;
+            
+            // 更新好友请求通知
+            const pendingRequests = friendRequests.filter(
+                req => req.receiverId === currentUser.id && req.status === 'pending'
+            );
+            
+            if (pendingRequests.length > 0) {
+                document.getElementById('friend-request-badge').textContent = pendingRequests.length;
+                document.getElementById('friend-request-badge').classList.remove('hidden');
+                document.getElementById('friend-requests-count').textContent = pendingRequests.length;
+                document.getElementById('friend-requests-count').classList.remove('hidden');
+            } else {
+                document.getElementById('friend-request-badge').classList.add('hidden');
+                document.getElementById('friend-requests-count').classList.add('hidden');
+            }
+            
+            // 更新好友列表
+            const userFriendships = friendships.filter(
+                fs => (fs.user1Id === currentUser.id || fs.user2Id === currentUser.id)
+            );
+            
+            if (userFriendships.length > 0) {
+                document.getElementById('no-friends').classList.add('hidden');
+                document.getElementById('friends-list-container').classList.remove('hidden');
+                
+                const container = document.getElementById('friends-list-container');
+                container.innerHTML = '';
+                
+                userFriendships.forEach(fs => {
+                    const friendId = fs.user1Id === currentUser.id ? fs.user2Id : fs.user1Id;
+                    const friend = users.find(u => u.id === friendId);
+                    
+                    if (friend) {
+                        const friendItem = document.createElement('div');
+                        friendItem.className = 'friend-item';
+                        
+                        const firstLetter = friend.username.charAt(0).toUpperCase();
+                        
+                        friendItem.innerHTML = `
+                            <div class="friend-avatar">${firstLetter}</div>
+                            <div class="friend-info">
+                                <h4>${friend.username}</h4>
+                                <p>加入日期: ${friend.joinDate}</p>
+                            </div>
+                            <div class="friend-actions">
+                                <button class="btn" onclick="viewFriendProfile('${friend.id}')">查看</button>
+                                <button class="btn btn-danger" onclick="removeFriend('${friend.id}')">删除</button>
+                            </div>
+                        `;
+                        
+                        container.appendChild(friendItem);
+                    }
+                });
+            } else {
+                document.getElementById('no-friends').classList.remove('hidden');
+                document.getElementById('friends-list-container').classList.add('hidden');
+            }
+            
+            // 更新好友请求列表
+            const receivedRequests = friendRequests.filter(
+                req => req.receiverId === currentUser.id && req.status === 'pending'
+            );
+            
+            if (receivedRequests.length > 0) {
+                document.getElementById('no-requests').classList.add('hidden');
+                document.getElementById('friend-requests-container').classList.remove('hidden');
+                
+                const container = document.getElementById('friend-requests-container');
+                container.innerHTML = '';
+                
+                receivedRequests.forEach(req => {
+                    const sender = users.find(u => u.id === req.senderId);
+                    
+                    if (sender) {
+                        const requestItem = document.createElement('div');
+                        requestItem.className = 'friend-request-item';
+                        
+                        const firstLetter = sender.username.charAt(0).toUpperCase();
+                        
+                        requestItem.innerHTML = `
+                            <div style="display: flex; align-items: center;">
+                                <div class="friend-avatar">${firstLetter}</div>
+                                <div>
+                                    <h4>${sender.username}</h4>
+                                    <p>请求时间: ${new Date(req.timestamp).toLocaleString()}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn" onclick="acceptFriendRequest('${req.id}')">接受</button>
+                                <button class="btn btn-danger" onclick="rejectFriendRequest('${req.id}')">拒绝</button>
+                            </div>
+                        `;
+                        
+                        container.appendChild(requestItem);
+                    }
+                });
+            } else {
+                document.getElementById('no-requests').classList.remove('hidden');
+                document.getElementById('friend-requests-container').classList.add('hidden');
+            }
+            
+            // 更新好友动态
+            updateFriendActivity();
+        }
+        
+        // 更新好友动态
+        function updateFriendActivity() {
+            if (!currentUser) return;
+            
+            const userFriendships = friendships.filter(
+                fs => (fs.user1Id === currentUser.id || fs.user2Id === currentUser.id)
+            );
+            
+            const friendIds = userFriendships.map(fs => 
+                fs.user1Id === currentUser.id ? fs.user2Id : fs.user1Id
+            );
+            
+            const friendExercises = exercises.filter(ex => 
+                friendIds.includes(ex.userId)
+            ).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+            
+            const container = document.getElementById('friend-activity');
+            
+            if (friendExercises.length > 0) {
+                container.innerHTML = '';
+                
+                friendExercises.forEach(ex => {
+                    const friend = users.find(u => u.id === ex.userId);
+                    const exerciseName = getExerciseName(ex.type);
+                    
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'friend-item';
+                    
+                    const firstLetter = friend.username.charAt(0).toUpperCase();
+                    
+                    activityItem.innerHTML = `
+                        <div class="friend-avatar">${firstLetter}</div>
+                        <div class="friend-info">
+                            <h4>${friend.username}</h4>
+                            <p>完成了 ${exerciseName} ${ex.duration}分钟</p>
+                            <small>${ex.date}</small>
+                        </div>
+                    `;
+                    
+                    container.appendChild(activityItem);
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无动态">
+                        <p>暂无好友动态</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 切换好友系统标签
+        function showFriendTab(tabId) {
+            // 隐藏所有好友标签
+            document.querySelectorAll('.friend-tab').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // 取消所有标签的active状态
+            document.querySelectorAll('#friends .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的标签
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // 设置选中标签的active状态
+            const tabIndex = Array.from(document.querySelectorAll('#friends .tab')).findIndex(
+                tab => tab.textContent.includes(tabId.replace('-', ' '))
+            );
+            
+            if (tabIndex !== -1) {
+                document.querySelectorAll('#friends .tab')[tabIndex].classList.add('active');
+            }
+            
+            // 如果是添加好友标签，清空搜索结果
+            if (tabId === 'add-friend') {
+                document.getElementById('friend-search').value = '';
+                document.getElementById('search-results').innerHTML = '';
+            }
+        }
+        
+        // 搜索好友
+        function searchFriends() {
+            const searchTerm = document.getElementById('friend-search').value.trim();
+            
+            if (!searchTerm) {
+                alert('请输入要搜索的用户名');
+                return;
+            }
+            
+            // 排除自己和已经是好友的用户
+            const friendIds = friendships
+                .filter(fs => fs.user1Id === currentUser.id || fs.user2Id === currentUser.id)
+                .map(fs => fs.user1Id === currentUser.id ? fs.user2Id : fs.user1Id);
+            
+            const results = users.filter(user => 
+                user.id !== currentUser.id && 
+                !friendIds.includes(user.id) &&
+                user.username.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
+            
+            if (results.length > 0) {
+                results.forEach(user => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    
+                    const firstLetter = user.username.charAt(0).toUpperCase();
+                    
+                    resultItem.innerHTML = `
+                        <div style="display: flex; align-items: center;">
+                            <div class="friend-avatar">${firstLetter}</div>
+                            <div>
+                                <h4>${user.username}</h4>
+                                <p>加入日期: ${user.joinDate}</p>
+                            </div>
+                        </div>
+                        <button class="btn" onclick="sendFriendRequest('${user.id}')">添加好友</button>
+                    `;
+                    
+                    container.appendChild(resultItem);
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="无结果">
+                        <p>未找到匹配的用户</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 发送好友请求
+        function sendFriendRequest(receiverId) {
+            if (!currentUser) return;
+            
+            // 检查是否已经发送过请求
+            const existingRequest = friendRequests.find(req => 
+                req.senderId === currentUser.id && 
+                req.receiverId === receiverId && 
+                req.status === 'pending'
+            );
+            
+            if (existingRequest) {
+                alert('您已经向该用户发送过好友请求了');
+                return;
+            }
+            
+            const newRequest = {
+                id: Date.now().toString(),
+                senderId: currentUser.id,
+                receiverId,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            
+            friendRequests.push(newRequest);
+            saveData();
+            
+            alert('好友请求已发送');
+            document.getElementById('friend-search').value = '';
+            document.getElementById('search-results').innerHTML = '';
+        }
+        
+        // 接受好友请求
+        function acceptFriendRequest(requestId) {
+            const request = friendRequests.find(req => req.id === requestId);
+            
+            if (request) {
+                request.status = 'accepted';
+                
+                // 创建好友关系
+                const newFriendship = {
+                    id: Date.now().toString(),
+                    user1Id: request.senderId,
+                    user2Id: request.receiverId,
+                    timestamp: new Date().toISOString()
+                };
+                
+                friendships.push(newFriendship);
+                saveData();
+                updateFriendData();
+                
+                alert('已接受好友请求');
+            }
+        }
+        
+        // 拒绝好友请求
+        function rejectFriendRequest(requestId) {
+            const request = friendRequests.find(req => req.id === requestId);
+            
+            if (request) {
+                request.status = 'rejected';
+                saveData();
+                updateFriendData();
+                
+                alert('已拒绝好友请求');
+            }
+        }
+        
+        // 删除好友
+        function removeFriend(friendId) {
+            if (confirm('确定要删除这个好友吗？')) {
+                // 删除好友关系
+                const friendshipIndex = friendships.findIndex(fs => 
+                    (fs.user1Id === currentUser.id && fs.user2Id === friendId) ||
+                    (fs.user1Id === friendId && fs.user2Id === currentUser.id)
+                );
+                
+                if (friendshipIndex !== -1) {
+                    friendships.splice(friendshipIndex, 1);
+                    saveData();
+                    updateFriendData();
+                    
+                    alert('好友已删除');
+                }
+            }
+        }
+        
+        // 查看好友资料
+        function viewFriendProfile(friendId) {
+            const friend = users.find(u => u.id === friendId);
+            
+            if (friend) {
+                alert(`好友资料:\n用户名: ${friend.username}\n性别: ${friend.gender === 'male' ? '男' : '女'}\n加入日期: ${friend.joinDate}\n个人签名: ${friend.signature}`);
+            }
+        }
+        
+        // 签到功能
+        function signIn() {
+            if (!currentUser) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // 检查是否已经签到
+            const hasSignedIn = signIns.some(s => s.userId === currentUser.id && s.date === today);
+            if (hasSignedIn) {
+                document.getElementById('signin-message').textContent = '今天已经签到过了！';
+                return;
+            }
+            
+            // 添加签到记录
+            signIns.push({
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                date: today
+            });
+            
+            saveData();
+            updateSignInData();
+            
+            document.getElementById('signin-message').textContent = '签到成功！获得5积分';
+        }
+        
+        // 保存运动记录
+        function saveExercise(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+            
+            const type = document.getElementById('exercise-type').value;
+            const duration = document.getElementById('duration').value;
+            const distance = document.getElementById('distance').value;
+            const calories = document.getElementById('calories').value;
+            const notes = document.getElementById('notes').value;
+            const today = new Date().toISOString().split('T')[0];
+            
+            exercises.push({
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                type,
+                duration,
+                distance: distance || null,
+                calories: calories || null,
+                notes: notes || null,
+                date: today
+            });
+            
+            saveData();
+            updateExerciseData();
+            updateFriendActivity();
+            
+            alert('运动记录已保存！');
+            document.getElementById('exercise-form').reset();
+            showSection('dashboard');
+        }
+        
+        // 快速记录运动
+        function quickRecord(type) {
+            if (!currentUser) return;
+            
+            const durationMap = {
+                'walking': 30,
+                'running': 20,
+                'cycling': 40
+            };
+            
+            const calorieMap = {
+                'walking': 150,
+                'running': 300,
+                'cycling': 250
+            };
+            
+            const distanceMap = {
+                'walking': 3,
+                'running': 5,
+                'cycling': 15
+            };
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            exercises.push({
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                type,
+                duration: durationMap[type],
+                distance: distanceMap[type],
+                calories: calorieMap[type],
+                notes: '快速记录',
+                date: today
+            });
+            
+            saveData();
+            updateExerciseData();
+            updateFriendActivity();
+            
+            alert(`已记录一次${getExerciseName(type)}运动！`);
+        }
+        
+        // 保存个人资料
+        function saveProfile(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+            
+            currentUser.gender = document.getElementById('profile-gender').value;
+            currentUser.birthday = document.getElementById('profile-birthday').value;
+            currentUser.height = document.getElementById('profile-height').value;
+            currentUser.weight = document.getElementById('profile-weight').value;
+            currentUser.signature = document.getElementById('profile-signature-input').value;
+            
+            // 更新users数组
+            const index = users.findIndex(u => u.id === currentUser.id);
+            if (index !== -1) {
+                users[index] = currentUser;
+                saveData();
+            }
+            
+            updateUI();
+            alert('个人资料已保存！');
+        }
+        
+        // 显示指定部分，隐藏其他部分
+        function showSection(sectionId) {
+            // 隐藏所有部分
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // 显示选中的部分
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // 如果是好友部分，默认显示好友列表
+            if (sectionId === 'friends') {
+                showFriendTab('friends-list');
+            }
+        }
+        
+        // 辅助函数：获取运动名称
+        function getExerciseName(type) {
+            const names = {
+                'walking': '步行',
+                'running': '跑步',
+                'cycling': '骑行',
+                'swimming': '游泳',
+                'yoga': '瑜伽',
+                'gym': '健身房',
+                'other': '其他'
+            };
+            return names[type] || type;
+        }
+        
+        // 辅助函数：检查日期是否在本周
+        function isDateInThisWeek(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            
+            const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+            const lastDayOfWeek = new Date(firstDayOfWeek);
+            lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+            
+            return date >= firstDayOfWeek && date <= lastDayOfWeek;
+        }
+        
+        // 辅助函数：检查日期是否在本月
+        function isDateInThisMonth(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            
+            return date.getMonth() === today.getMonth() && 
+                   date.getFullYear() === today.getFullYear();
+        }
+    </script>
 </body>
 </html>

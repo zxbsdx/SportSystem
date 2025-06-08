@@ -21,9 +21,9 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login-page")
                 
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/index", true)
                 .permitAll()
-            )// 禁用CSRF（仅限演示，生产环境需开启）
+            )// 禁用CSRF
             .csrf(csrf -> csrf.disable());
         return http.build();
     }
