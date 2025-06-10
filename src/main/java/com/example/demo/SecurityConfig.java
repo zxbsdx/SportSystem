@@ -13,15 +13,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login-page", "/register", "/register/**", "/static/**", "/login").permitAll()
+                .requestMatchers("/login-page", "/register", "/register/**", "/static/**", "/login", "/api/user", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
             )
             // 禁用默认表单登录 自定义处理post请求
             // .formLogin(form -> form.disable()
             .formLogin(form -> form
                 .loginPage("/login-page")
-                
-                .defaultSuccessUrl("/index", true)
+                .defaultSuccessUrl("/", true)
                 .permitAll()
             )// 禁用CSRF
             .csrf(csrf -> csrf.disable());
@@ -33,4 +32,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

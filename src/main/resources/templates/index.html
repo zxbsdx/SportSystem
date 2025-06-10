@@ -687,7 +687,7 @@
     
     <script>
         // 获取当前用户数据
-        fetch('/api/userInfo', { method: 'POST', credentials: 'include' })
+        fetch('/api/user', { method: 'POST', credentials: 'include' })
         .then(response => response.json())
         .then(user => {
             if (user) {
@@ -750,7 +750,7 @@
  
             
             const user =  { 
-                username: "jiangnan", 
+                username: "5678", 
                 password: "222333", 
                 id: 1
              

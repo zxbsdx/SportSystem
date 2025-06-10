@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -23,8 +24,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 
-
-
 @Controller
 public class HomeController {
 
@@ -34,7 +33,7 @@ public class HomeController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/index")  
+    @GetMapping("/")  
     public String home() {
         return "index"; 
     }
@@ -45,10 +44,6 @@ public class HomeController {
         return "login"; 
     }
 
-    @GetMapping("/favicon.ico")  
-    public String favicon() {
-        return "/favicon.ico"; 
-    }
     
     // 处理登录请求
     @PostMapping("/login")
@@ -61,11 +56,11 @@ public class HomeController {
         User user = userRepository.findByUsername(username);
         // System.out.println(passwordEncoder.matches(password, user.getPassword()));
        
-        System.out.println(user.getPassword());
-        System.out.println(password);
-        //if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        // System.out.println(user.getPassword());
+        // System.out.println(password);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
-        if (user!=null && password.equals(user.getPassword())){
+        //if (user!=null && password.equals(user.getPassword())){
             // 登录成功
 
             // 注意手动设置JSESSIONID Spring Security 不认
@@ -73,20 +68,20 @@ public class HomeController {
 
             List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
             Authentication auth = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), 
+                user, 
                 null, 
                 authorities
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
           
-        // 存储用户对象到 Session（非必须）
+        // 存储用户对象到 Session
             session.setAttribute("currentUser", user);
-
+            session.setMaxInactiveInterval(1800); // 30分钟
             return "index";
         } else {
             // 登录失败
             // model.addAttribute("error", user);
-  
+            model.addAttribute("error", "用户名或密码错误");
             return "login";
         }
     }

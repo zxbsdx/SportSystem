@@ -2,12 +2,13 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -18,15 +19,26 @@ public class API_Controller {
 
     HttpSession session;
     
-    @PostMapping("/api/userInfo") 
-    public ResponseEntity<?> usrinfo() {
+    @PostMapping("/api/user") 
+    public String usrinfo(HttpServletRequest request) {
 
-        User user = (User) session.getAttribute("currentUser");
-        if (user == null) {
-        return ResponseEntity.status(401).body("未登录"); // 明确返回 401
+        HttpSession session = request.getSession(); // 等价于 request.getSession(true)，会创建新会话
+        
+        // 检查会话是否有效
+        if (session != null) {
+            // 获取会话属性
+            Object user = session.getAttribute("user");
+            if (user != null) {
+                return "用户信息: " + user.toString();
+            } else {
+                return "用户未登录";
+            }
+        } else {
+            return "会话无效";
+        }
     }
-        return ResponseEntity.ok(user); 
-    }
+    
+
 
     @PostMapping("/api/set_userInfo") 
     public ResponseEntity<?> set_info(
@@ -54,5 +66,24 @@ public class API_Controller {
     
     return ResponseEntity.ok("用户信息更新成功");
 }
+    // 获取用户信息
+    @PostMapping("/api/user_info") 
+    public User_info user_info() {
+        User_info info = null;
+        return info; 
+    }
+    // 获取运动信息
+    @PostMapping("/api/get_sport") 
+    public Sports get_sport() {
+        Sports info = null;
+        return info; 
+    }
+
+    // 获取成就信息
+    @PostMapping("/api/get_achievement") 
+    public Achievement get_achievement() {
+        Achievement info = null;
+        return info; 
+    }   
 
 }

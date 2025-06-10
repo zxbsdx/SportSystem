@@ -3,6 +3,7 @@ package com.example.demo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -90,6 +91,28 @@ public class User implements UserDetails {
      // 检查用户名是否存在
     public static boolean existsByUsername(UserRepository repo, String username) {
         return repo.findByUsername(username) != null;
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // 账户未过期
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // 账户未锁定
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // 凭证未过期
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // 账户已启用
+
     }
 
 
